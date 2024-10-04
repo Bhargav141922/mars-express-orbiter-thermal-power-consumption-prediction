@@ -18,7 +18,7 @@
 This project provides an end-to-end data processing and machine learning pipeline for the Mars Express Orbiter mission to predict thermal power consumption. It covers each stage from data ingestion to preprocessing, model training, and finally to model testing and prediction generation. The entire pipeline is containerized using Docker for ease of deployment and scalability, and orchestrated using Docker Compose.
 
 ## System Architecture
-
+![architecture_diagram_casestudy](https://github.com/user-attachments/assets/5c7754be-1251-45d2-88a8-1e6494088c9d)
 
 The project is designed with the following components:
 
