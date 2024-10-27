@@ -105,6 +105,8 @@ This command will pull the necessary Docker images from Docker Hub and start all
 │   └── training.py            # Model training script
 ├── model_testing/
 │   └── testing.py             # Model testing script
+├── data_visualization/
+│   └── Dataviz.py 
 ├── docker-compose.yml         # Docker Compose configuration
 └── README.md                  # Project README file
 ```
