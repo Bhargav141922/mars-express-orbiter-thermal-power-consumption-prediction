@@ -1,4 +1,4 @@
-#afterbuild#version: '3.8'
+#afterbuild #docker-compose.yml #version: '3.8'
 
 services:
   db:
@@ -19,6 +19,8 @@ services:
       start_period: 5s
 
   data_ingestion:
+    build:
+      context: ./data_ingestion
     image: bhargavdeekshithvasu1997/mars_express_orbiter:data_ingestion
     depends_on:
       db:
@@ -30,14 +32,16 @@ services:
       DB_USER: admin
       DB_PASS: 1234
     volumes:
-      - ./data:/app/data  # Mount the host data directory to /app/data in the container
+      - ./data:/app/data
       - flags_volume:/flags
 
   preprocessing:
+    build:
+      context: ./preprocessing
     image: bhargavdeekshithvasu1997/mars_express_orbiter:preprocessing
     depends_on:
-      db:
-        condition: service_healthy
+      data_ingestion:
+        condition: service_started
     environment:
       DB_HOST: db
       DB_PORT: 5432
@@ -48,10 +52,12 @@ services:
       - flags_volume:/flags
 
   model_training:
+    build:
+      context: ./model_training
     image: bhargavdeekshithvasu1997/mars_express_orbiter:model_training
     depends_on:
-      db:
-        condition: service_healthy
+      preprocessing:
+        condition: service_started
     environment:
       DB_HOST: db
       DB_PORT: 5432
@@ -59,14 +65,16 @@ services:
       DB_USER: admin
       DB_PASS: 1234
     volumes:
-      - ./models:/models  # To store the pickle files in the "models" folder
+      - ./models:/models
       - flags_volume:/flags
 
   model_testing:
+    build:
+      context: ./model_testing
     image: bhargavdeekshithvasu1997/mars_express_orbiter:model_testing
     depends_on:
-      db:
-        condition: service_healthy
+      model_training:
+        condition: service_started
     environment:
       DB_HOST: db
       DB_PORT: 5432
@@ -74,11 +82,28 @@ services:
       DB_USER: admin
       DB_PASS: 1234
     volumes:
-      - ./models:/models  # To access the pickle files and metadata.json
-      - ./results:/results  # To store the predictions
+      - ./models:/models
+      - ./results:/results
       - flags_volume:/flags
+
+  data_visualization:
+    image: bhargavdeekshithvasu1997/mars_express_orbiter:data_visualization
+    depends_on:
+      model_testing:
+        condition: service_started
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: mex_database
+      DB_USER: admin
+      DB_PASS: 1234
+    volumes:
+      - ./models:/models
+      - ./results:/results
+      - flags_volume:/flags
+    ports:
+      - "8501:8501"
 
 volumes:
   db_data:
   flags_volume:
-
