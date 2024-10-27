@@ -15,7 +15,7 @@
 
 ## Introduction
 
-This project provides an end-to-end data processing and machine learning pipeline for the Mars Express Orbiter mission to predict thermal power consumption. It covers each stage from data ingestion to preprocessing, model training, and finally to model testing and prediction generation. The entire pipeline is containerized using Docker for ease of deployment and scalability, and orchestrated using Docker Compose.
+The Mars Express Orbiter Thermal Power Consumption Prediction project aims to predict the thermal power consumption (NPWD2372) of the Mars Express Orbiter using historical telemetry data. The project involves data ingestion, preprocessing, model training, testing, and visualization, all orchestrated using Docker and Docker Compose.
 
 ## System Architecture
 ![architecture_diagram_casestudy](https://github.com/user-attachments/assets/2a16de0e-1299-43a5-aba8-e09585d61214)
@@ -28,6 +28,7 @@ The project is designed with the following components:
 * **Preprocessing Service**: Cleans and preprocesses the data for model training.
 * **Model Training Service**: Trains machine learning models using the preprocessed data.
 * **Model Testing Service**: Tests the trained models on test data and generates predictions.
+* **Data Visualization** : Streamlit app to visualize data and predictions.
 * **Docker and Docker Compose**: Used for containerization and orchestration of services.
 
 ## Technologies
@@ -44,6 +45,7 @@ The project utilizes the following technologies:
 * **CatBoost**: Gradient boosting library with categorical features support.
 * **SQLAlchemy**: Database toolkit and ORM for Python.
 * **psycopg2**: PostgreSQL database adapter for Python.
+* **Streamit**: Streamlit app to visualize data and predictions.
 
 ## Getting Started
 ### Prerequisites
@@ -84,6 +86,9 @@ This command will pull the necessary Docker images from Docker Hub and start all
 
     * Tests the trained models on test data and generates predictions.
     * Image: ```bhargavdeekshithvasu1997/mars_express_orbiter:model_testing```
+* Data Visualization Service (```data_visualization```)
+    * Visualises the solar aspect angles and the models suitable for a particular window of time.
+    * Image: ```bhargavdeekshithvasu1997/mars_express_orbiter:data_visualization```
 * PostgreSQL Database Service (```db```)
 
     * Stores ingested and preprocessed data.
